@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="iBeaconDetectionApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="classycrab" translatesAutoresizingMaskIntoConstraints="NO" id="UaZ-HK-fbk">
+                                <rect key="frame" x="20" y="60" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="7ub-fg-ygz"/>
+                                    <constraint firstAttribute="height" constant="80" id="U4i-cR-pmG"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iBeacDetect" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4J-t7-3V2">
+                                <rect key="frame" x="217" y="60" width="138" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="Ycb-S1-qA6"/>
+                                    <constraint firstAttribute="width" constant="138" id="eYN-Rv-DmR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
+                                <color key="textColor" red="0.1176470588" green="0.1960784314" blue="0.43921568630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iBeacon Detection Demo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L1U-uj-GyU">
+                                <rect key="frame" x="165" y="97" width="190" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="GyS-H6-jhf"/>
+                                    <constraint firstAttribute="width" constant="190" id="cAA-fS-DOf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17S-la-xHU">
+                                <rect key="frame" x="20" y="160" width="335" height="200"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="lia-jU-HWQ"/>
+                                </constraints>
+                                <mutableString key="text">This app is used to measure iBeacon detection rate on different devices. It is intended to be used with the associated nRF52 iBeacon with rotating identity.  You need to grant access to location and notification permissions for this demo to be functional. After granting the permissions, exit the app and get close to an appropriately configured iBeacon.</mutableString>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VMX-CF-x0e">
+                                <rect key="frame" x="20" y="617" width="335" height="30"/>
+                                <color key="backgroundColor" red="0.1176470588" green="0.1960784314" blue="0.43921568630000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="dsK-fy-zr8"/>
+                                </constraints>
+                                <state key="normal" title="Acquire Permissions">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRequestPermissionButtonTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sMa-PD-Os3"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="10r-tM-5nE">
+                                <rect key="frame" x="20" y="380" width="335" height="216"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="17S-la-xHU" secondAttribute="trailing" constant="20" id="0mX-gi-S36"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="10r-tM-5nE" secondAttribute="trailing" constant="20" id="0on-S5-96G"/>
+                            <constraint firstItem="17S-la-xHU" firstAttribute="top" secondItem="UaZ-HK-fbk" secondAttribute="bottom" constant="20" id="2Kn-bx-lB8"/>
+                            <constraint firstItem="m4J-t7-3V2" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="3gw-Od-Md5"/>
+                            <constraint firstItem="10r-tM-5nE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="5vw-Op-JUn"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="L1U-uj-GyU" secondAttribute="trailing" constant="20" id="9Jw-uh-RKa"/>
+                            <constraint firstItem="L1U-uj-GyU" firstAttribute="top" secondItem="m4J-t7-3V2" secondAttribute="bottom" constant="8" id="I5Q-7j-MK1"/>
+                            <constraint firstItem="UaZ-HK-fbk" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="IRa-b6-Im4"/>
+                            <constraint firstItem="10r-tM-5nE" firstAttribute="top" secondItem="17S-la-xHU" secondAttribute="bottom" constant="20" id="KUH-Le-80a"/>
+                            <constraint firstItem="17S-la-xHU" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="aqK-M3-KcB"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="VMX-CF-x0e" secondAttribute="bottom" constant="20" id="fGR-Vo-9MQ"/>
+                            <constraint firstItem="VMX-CF-x0e" firstAttribute="top" secondItem="10r-tM-5nE" secondAttribute="bottom" constant="21" id="tko-ec-L7j"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="m4J-t7-3V2" secondAttribute="trailing" constant="20" id="uXB-Mv-BHR"/>
+                            <constraint firstItem="UaZ-HK-fbk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="und-AZ-tau"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="VMX-CF-x0e" secondAttribute="trailing" constant="20" id="wFR-5J-86S"/>
+                            <constraint firstItem="VMX-CF-x0e" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="wYF-gZ-47n"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="statusView" destination="10r-tM-5nE" id="LMd-hO-orp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="117.59999999999999" y="118.29085457271366"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="classycrab" width="147" height="148"/>
+    </resources>
+</document>

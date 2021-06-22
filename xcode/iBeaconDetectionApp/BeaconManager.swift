@@ -10,8 +10,8 @@ class BeaconManager: NSObject {
     
     // iBeacon configuration: this must match your beacon setup
     let proximityUuid = UUID(uuidString: "CB10023F-A318-3394-4199-A8730C7C1AEC")!
-    let major: UInt16 = 1
-    let minor: UInt16 = 2
+//    let major: UInt16 = 1
+//    let minor: UInt16 = 2
     let locationManager = CLLocationManager()
 
     var numberOfDetections = 0
@@ -44,7 +44,7 @@ class BeaconManager: NSObject {
             notificationCenter.getNotificationSettings { (notificationSettings) in
                 if notificationSettings.authorizationStatus == .authorized {
                     let content = UNMutableNotificationContent()
-                    content.title = "Beacon detected: \(beacon.major!) / \(beacon.minor!)"
+                    content.title = "Beacon detected: \(beacon.identifier)"
                     content.body = "Total # detections: \(num), \(beacon.proximityUUID)"
                     content.sound = UNNotificationSound.default()
                     content.categoryIdentifier = "initiate"
@@ -117,12 +117,11 @@ extension BeaconManager: CLLocationManagerDelegate {
 //                locationManager.stopRangingBeacons(in: monitoredRegion)
             }
             
-            let beaconRegion = CLBeaconRegion(proximityUUID: proximityUuid, major: major,
-                                              minor: minor, identifier: "region\(minor)")
+            let beaconRegion = CLBeaconRegion(proximityUUID: proximityUuid, identifier: "region")
             beaconRegion.notifyEntryStateOnDisplay = true
             locationManager.startMonitoring(for: beaconRegion)
             locationManager.startRangingBeacons(in: beaconRegion)
-            print("Subscribing to proximityUUID: \(proximityUuid) major: \(major) minor: \(minor)")
+            print("Subscribing to proximityUUID: \(proximityUuid)")
 
             print("Started monitoring for beacon regions")
         } else {

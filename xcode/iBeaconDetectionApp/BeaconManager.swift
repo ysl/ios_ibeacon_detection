@@ -9,9 +9,9 @@ import UserNotifications
 class BeaconManager: NSObject {
     
     // iBeacon configuration: this must match your beacon setup
-    let proximityUuid = UUID(uuidString: "33013f7f-cb46-4db6-b4be-542c310a81eb")!
-    let major: UInt16 = 204
-    let minorRange: CountableRange<UInt16> = 1..<21
+    let proximityUuid = UUID(uuidString: "CB10023F-A318-3394-4199-A8730C7C1AEC")!
+    let major: UInt16 = 1
+    let minor: UInt16 = 2
     let locationManager = CLLocationManager()
 
     var numberOfDetections = 0
@@ -45,7 +45,7 @@ class BeaconManager: NSObject {
                 if notificationSettings.authorizationStatus == .authorized {
                     let content = UNMutableNotificationContent()
                     content.title = "Beacon detected: \(beacon.major!) / \(beacon.minor!)"
-                    content.body = "Total # detections: \(num)"
+                    content.body = "Total # detections: \(num), \(beacon.proximityUUID)"
                     content.sound = UNNotificationSound.default()
                     content.categoryIdentifier = "initiate"
                     let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
@@ -61,6 +61,35 @@ class BeaconManager: NSObject {
         let unc = UNUserNotificationCenter.current()
         unc.getDeliveredNotifications { (deliveredNotifications) in
             let notificationsToRemove = deliveredNotifications.filter({ $0.request.content.categoryIdentifier == "initiate" })
+            unc.removeDeliveredNotifications(withIdentifiers: notificationsToRemove.map({ $0.request.identifier }))
+            completionHandler()
+        }
+    }
+
+    fileprivate func notifyBeaconRanging(beacon: CLBeacon) {
+        NotificationCenter.default.post(name: NSNotification.Name("beaconRanging"), object: beacon)
+        clearRangingNotifications {
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.getNotificationSettings { (notificationSettings) in
+                if notificationSettings.authorizationStatus == .authorized {
+                    let content = UNMutableNotificationContent()
+                    content.title = "Beacon ranging: \(beacon.major) / \(beacon.minor) / \(beacon.rssi)"
+                    content.body = "UUID: \(beacon.proximityUUID)"
+                    content.sound = UNNotificationSound.default()
+                    content.categoryIdentifier = "ranging"
+                    let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+                    UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+                } else {
+                    print("Not authorized to show notification")
+                }
+            }
+        }
+    }
+
+    private func clearRangingNotifications(completionHandler: @escaping () -> Void) {
+        let unc = UNUserNotificationCenter.current()
+        unc.getDeliveredNotifications { (deliveredNotifications) in
+            let notificationsToRemove = deliveredNotifications.filter({ $0.request.content.categoryIdentifier == "ranging" })
             unc.removeDeliveredNotifications(withIdentifiers: notificationsToRemove.map({ $0.request.identifier }))
             completionHandler()
         }
@@ -85,31 +114,54 @@ extension BeaconManager: CLLocationManagerDelegate {
         if (status == .authorizedAlways || status == .authorizedWhenInUse) {
             for monitoredRegion in locationManager.monitoredRegions {
                 locationManager.stopMonitoring(for: monitoredRegion)
+//                locationManager.stopRangingBeacons(in: monitoredRegion)
             }
             
-            for minor in minorRange {
-                let beaconRegion = CLBeaconRegion(proximityUUID: proximityUuid, major: major,
-                                                  minor: minor, identifier: "region\(minor)")
-                beaconRegion.notifyEntryStateOnDisplay = true
-                locationManager.startMonitoring(for: beaconRegion)
-                print("Subscribing to proximityUUID: \(proximityUuid) major: \(major) minor: \(minor)")
-            }
+            let beaconRegion = CLBeaconRegion(proximityUUID: proximityUuid, major: major,
+                                              minor: minor, identifier: "region\(minor)")
+            beaconRegion.notifyEntryStateOnDisplay = true
+            locationManager.startMonitoring(for: beaconRegion)
+            locationManager.startRangingBeacons(in: beaconRegion)
+            print("Subscribing to proximityUUID: \(proximityUuid) major: \(major) minor: \(minor)")
+
             print("Started monitoring for beacon regions")
         } else {
             print("Not authorized for beacon region monitoring")
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if let beaconRegion = region as? CLBeaconRegion {
             print("ENTER beacon region: \(beaconRegion)")
             self.notifyBeaconDetected(beacon: beaconRegion)
         }
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if let beaconRegion = region as? CLBeaconRegion {
             print("EXIT beacon region: \(beaconRegion)")
+        }
+    }
+
+    public func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
+        print("Failed monitoring region: \(error.localizedDescription)")
+    }
+
+    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager failed: \(error.localizedDescription)")
+    }
+
+    func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
+        print("didRangeBeacons()")
+        for beacon in beacons {
+            let data = "{\n" +
+                "  \"uuid\": \"\(beacon.proximityUUID)\",\n" +
+                "  \"major\": \"\(beacon.major)\",\n" +
+                "  \"minor\": \"\(beacon.minor)\",\n" +
+                "  \"rssi\": \"\(beacon.rssi)\",\n" +
+                "}"
+            print(data);
+            notifyBeaconRanging(beacon: beacon)
         }
     }
 }

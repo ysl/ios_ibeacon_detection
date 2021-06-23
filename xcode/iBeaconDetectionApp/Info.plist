@@ -32,6 +32,8 @@
 	<string>Location access required for iBeacon monitoring</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location access required for iBeacon monitoring</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Location access required for iBeacon monitoring</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

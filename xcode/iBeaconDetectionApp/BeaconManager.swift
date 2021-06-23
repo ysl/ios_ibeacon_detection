@@ -4,6 +4,7 @@
 import Foundation
 import UIKit
 import CoreLocation
+import CoreBluetooth
 import UserNotifications
 
 class BeaconManager: NSObject {
@@ -13,6 +14,7 @@ class BeaconManager: NSObject {
 //    let major: UInt16 = 1
 //    let minor: UInt16 = 2
     let locationManager = CLLocationManager()
+    let peripheralManager = CBPeripheralManager()
 
     var numberOfDetections = 0
     
@@ -20,6 +22,7 @@ class BeaconManager: NSObject {
         super.init()
         locationManager.delegate = self
         locationManager.pausesLocationUpdatesAutomatically = false
+        peripheralManager.delegate = self
         
         let initiateAction = UNNotificationAction(identifier: "initiate", title: "Perform Action", options: [])
         let cancelAction = UNNotificationAction(identifier: "cancel", title: "Cancel",
@@ -162,5 +165,38 @@ extension BeaconManager: CLLocationManagerDelegate {
             print(data);
             notifyBeaconRanging(beacon: beacon)
         }
+    }
+}
+
+extension BeaconManager: CBPeripheralManagerDelegate {
+    func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
+        switch peripheral.state {
+            case .unknown:
+                print("Unknown")
+            case .resetting:
+                print("Resetting")
+            case .unsupported:
+                print("unsupported")
+            case .unauthorized:
+                print("unauthorized")
+            case .poweredOff:
+                print("poweredOff")
+                peripheralManager.stopAdvertising()
+                break
+            case .poweredOn:
+                print("poweredOn")
+                let beaconRegion = CLBeaconRegion(proximityUUID: proximityUuid, major: 3, minor: 4, identifier:  "mybeacon" )
+                let beaconPeripheralData: NSDictionary = beaconRegion.peripheralData(withMeasuredPower: nil)
+                peripheralManager.startAdvertising(beaconPeripheralData as? [String : Any])
+                print("startAdvertising")
+                break
+        }
+    }
+    
+    func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
+        if (error != nil) {
+            print(error!)
+        }
+        print("peripheralManagerDidStartAdvertising=" + (peripheral.isAdvertising ? "true" : "false"))
     }
 }
